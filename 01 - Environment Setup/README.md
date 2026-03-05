@@ -177,10 +177,10 @@ cargo update -p blake3 --precise 1.7.0
 ```
 Bây giờ bạn đã sẵn sàng để bắt đầu xây dựng trên Solana với Anchor!
 
-# LƯU Ý : Bạn nên sử dụng các hệ điều hành sau để lập trình smart contract trên Solana
-## WSL2 (WSL) trên Windows  
-## Ubuntu
-## MacOS
+## LƯU Ý : Bạn nên sử dụng các hệ điều hành sau để lập trình smart contract trên Solana
+### WSL2 (WSL) trên Windows  
+### Ubuntu
+### MacOS
 
 
 

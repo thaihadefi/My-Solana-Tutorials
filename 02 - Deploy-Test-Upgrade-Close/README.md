@@ -335,33 +335,10 @@ Trong Phần 3 (Nâng cấp), chúng ta đã gặp vấn đề này khi triển 
 
 Đây không phải là vấn đề lớn trên Devnet, nơi bạn chỉ cần chạy `solana airdrop 5` để lấy thêm SOL (mặc dù có giới hạn lượng nhận được trong ngày 🐢). Nhưng trên Mainnet, đây là tiền thật! Tính đến tháng 2 năm 2026, 1 SOL trị giá khoảng $80.
 
-Vì vậy, để thu hồi SOL, trước tiên bạn cần khôi phục cặp khóa của bộ đệm bằng cách sử dụng seed phrases được hiển thị trong thông báo lỗi.
+Vì vậy, để thu hồi SOL, bạn có thể đóng các smart contract đã deploy và thu hồi SOL của mình:
 ```bash
-solana-keygen recover -o /path/buffer-keypair.json
+solana program close <YOUR_PROGRAM_ID>
 ```
-
-Sau đó nhập seed phrases.
-
-Bạn sẽ thấy:
-```bash
-[recover] seed phrase: 
-[recover] If this seed phrase has an associated passphrase, enter it now. Otherwise, press ENTER to continue: 
-Recovered pubkey `"HjbPTpkuANicPYtKE3WXfMARTQbqn5fsqx5Bmedr6vUt"`. Continue? (y/n): 
-```
-
-Bạn có thể chọn "y" để lưu tệp cặp khóa cho lần sử dụng sau, nhưng vì tôi đã có địa chỉ bộ đệm nên tôi sẽ chọn "n" và tiến hành đóng nó ngay lập tức.
-
-Bây giờ bạn đã có địa chỉ tài khoản đệm, bạn có thể đóng nó và thu hồi SOL của mình:
-```bash
-solana program close <YOUR_BUFFER_ADDRESS>
-```
-
-Bạn sẽ thấy xác nhận như thế này:
-```bash
-Buffer Address                               | Authority                                    | Balance
-HjbPTpkuANicPYtKE3WXfMARTQbqn5fsqx5Bmedr6vUt | jixspQw81GQVo969PPNeK7WteDhvWVFWhcLfLoMiPo2  | 1.2628572 SOL
-```
-
 Bạn có thể xác minh lại số dư ví của mình bằng cách chạy:
 ```bash
 solana balance
