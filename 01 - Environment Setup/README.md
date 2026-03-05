@@ -28,7 +28,7 @@ rustc --version && solana --version && anchor --version && node --version && yar
 ```
 Lệnh này sẽ cài đặt PHIÊN BẢN MỚI NHẤT, không phải PHIÊN BẢN PHÙ HỢP NHẤT. Để cài đặt các phiên bản phù hợp, hãy dán và chạy các lệnh sau:
 ```bash
-rustup default 1.90.0
+rustup default 1.89.0
 agave-install init 2.3.0
 avm use 0.31.1
 
@@ -51,9 +51,9 @@ Kiểm tra xem Rust đã được cài đặt thành công chưa:
 rustc --version
 ```
 
-Để đảm bảo tính tương thích với phiên bản ổn định của Anchor (sẽ được cài đặt trong phần tiếp theo), chúng ta nên đặt phiên bản Rust thành 1.90.0:
+Để đảm bảo tính tương thích với phiên bản ổn định của Anchor (sẽ được cài đặt trong phần tiếp theo), chúng ta nên đặt phiên bản Rust thành 1.89.0:
 ```bash
-rustup default 1.90.0
+rustup default 1.89.0
 ```
 
 ### 2. Cài đặt Solana CLI 
@@ -62,7 +62,7 @@ rustup default 1.90.0
 
 Chạy lệnh sau để tải xuống và cài đặt Solana CLI:
 ```bash
-sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.0/install)"
+sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.8/install)"
 ```
 
 Sau khi cài đặt, hãy cập nhật môi trường của bạn để lệnh `solana` có sẵn:
@@ -74,7 +74,7 @@ Kiểm tra phiên bản để xác nhận mọi thứ đã được thiết lậ
 ```bash
 solana --version
 ```
-
+```
 Bây giờ Solana CLI đã được cài đặt thành công, bạn có thể tạo ví đầu tiên của mình bằng lệnh:
 ```bash
 solana-keygen new 
@@ -165,6 +165,15 @@ success Saved lockfile.
 ✨  Done in 8.05s.
 Initialized empty Git repository in /Users/mac/Desktop/Solana Tutorials/Big-O Coding/solana-tutorials/01 - Environment Setup/my-first-anchor-project/.git/
 my-first-anchor-project initialized
+```
+
+Nếu sau các bước trên bạn gặp lỗi 
+```bash
+feature edition2024 is required
+```
+hãy chạy lệnh sau : 
+```bash
+cargo update -p blake3 --precise 1.7.0 
 ```
 Bây giờ bạn đã sẵn sàng để bắt đầu xây dựng trên Solana với Anchor!
 

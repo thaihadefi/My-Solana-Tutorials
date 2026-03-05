@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("GDGNBNAhHGmMKcxVxXBTTJ8xytmdjNuFWsr2igqhck27");
+declare_id!("EfBMUxsHSmhriWZfWNvLoqtsneUh1UFe9bmLmqB38taJ");
 
 #[program]
 pub mod my_first_anchor_project {
@@ -9,7 +9,7 @@ pub mod my_first_anchor_project {
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         let name = "Kai";
         let age = 22;
-
+        
         msg!("My name is {}", name);
         msg!("I'm {} years old", age);
         msg!("This is my first anchor project!");

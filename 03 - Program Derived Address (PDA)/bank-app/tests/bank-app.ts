@@ -32,6 +32,7 @@ describe("bank-app", () => {
   it("Is initialized!", async () => {
     try {
       const bankInfo = await program.account.bankInfo.fetch(BANK_APP_ACCOUNTS.bankInfo)
+      //const userReserve = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey))
       console.log("Bank info: ", bankInfo)
     } catch {
       const tx = await program.methods.initialize()

@@ -281,7 +281,7 @@ Bây giờ bạn có thể mở rộng không gian được phân bổ của sma
 ```bash
 solana program extend <YOUR_PROGRAM_ID> 864
 ```
-Và thế là xong!
+Và thế là xong! 
 
 Bây giờ bạn đã sẵn sàng nâng cấp smart contract, hãy chạy lại lệnh triển khai.
 Nếu mọi thứ diễn ra suôn sẻ, smart contract của bạn bây giờ đã được nâng cấp thành công!
