@@ -16,7 +16,7 @@ Sau khi dự án Anchor của bạn được khởi tạo, Anchor sẽ tạo ra 
 ```rust
 use anchor_lang::prelude::*;
 
-declare_id!("2VCJobu63BfwAz1YNFY76tjWCHJubQGa9Qysc5fQmPP8");
+declare_id!("F6N2DHUh9szawNRDSvC7VMqVCjLxTCJd2GDsf5vXjjZS");
 
 #[program]
 pub mod my_first_anchor_project {
@@ -33,7 +33,7 @@ pub struct Initialize {}
 
 Dòng đầu tiên bạn thấy là ID hay địa chỉ của smart contract:
 ```rust
-declare_id!("2VCJobu63BfwAz1YNFY76tjWCHJubQGa9Qysc5fQmPP8");
+declare_id!("F6N2DHUh9szawNRDSvC7VMqVCjLxTCJd2GDsf5vXjjZS");
 ```
 
 Đây là **program ID** (hay địa chỉ smart contract) sẽ được sử dụng sau khi triển khai. ID thực tế được xác định bởi cặp khóa (keypair) nằm tại:
@@ -97,7 +97,7 @@ solana program deploy target/deploy/my_first_anchor_project.so --program-id targ
 
 Bạn sẽ thấy kết quả tương tự như thế này:
 ```bash
-Program Id: 2VCJobu63BfwAz1YNFY76tjWCHJubQGa9Qysc5fQmPP8
+Program Id: F6N2DHUh9szawNRDSvC7VMqVCjLxTCJd2GDsf5vXjjZS
 ```
 
 🎉 **Chúc mừng!** Bạn đã deploy thành công smart contract đầu tiên của mình lên Devnet.
@@ -184,7 +184,7 @@ anchor run test
 Bạn sẽ thấy kết quả như thế này trong terminal của mình:
 ```bash
   my-first-anchor-project
-Your transaction signature 3iFa2ASp4mcivVr2RjiqvUeVDwe1vcasp31A9vxperVRvPttcod9DqLyaY8kWu5d5owS6QuoJw5zfFDpBvb1jFqU
+Your transaction signature 3zZYomyMUycq2ybS6ACPszaQ5kTP8ZGoqU6TCxssXc1cU8YfTMMyABnY4r5e5pyvpjwhixkwsUbMrDACGmqjekAJ
     ✔ Is initialized! (1362ms)
 
 
@@ -193,7 +193,7 @@ Your transaction signature 3iFa2ASp4mcivVr2RjiqvUeVDwe1vcasp31A9vxperVRvPttcod9D
 
 ✅ Chúc mừng! Bài kiểm tra của bạn đã vượt qua và smart contract của bạn đã được khởi tạo thành công.
 
-Bạn thậm chí có thể sao chép mã băm giao dịch và xem nó trên [Solscan](https://solscan.io/tx/3iFa2ASp4mcivVr2RjiqvUeVDwe1vcasp31A9vxperVRvPttcod9DqLyaY8kWu5d5owS6QuoJw5zfFDpBvb1jFqU?cluster=devnet) để thấy nó đang hoạt động.
+Bạn thậm chí có thể sao chép mã băm giao dịch và xem nó trên [Solscan](https://solscan.io/tx/3zZYomyMUycq2ybS6ACPszaQ5kTP8ZGoqU6TCxssXc1cU8YfTMMyABnY4r5e5pyvpjwhixkwsUbMrDACGmqjekAJ?cluster=devnet) để thấy nó đang hoạt động.
 
 ### 3. Nâng cấp
 
@@ -204,8 +204,8 @@ Hãy cùng tìm hiểu cách nâng cấp smart contract sau khi thay đổi mộ
 Trong hàm `initialize()` của bạn, hãy thêm một số bản ghi (logging) để xem cách `msg!()` hoạt động:
 ```rust
 pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-    let name = "Nhat";
-    let age = 23;
+    let name = "Kai";
+    let age = 22;
 
     msg!("My name is {}", name);
     msg!("I'm {} years old", age);
@@ -290,15 +290,14 @@ Nếu mọi thứ diễn ra suôn sẻ, smart contract của bạn bây giờ đ
 Bạn sẽ thấy kết quả tương tự như:
 ```bash
   my-first-anchor-project
-Your transaction signature hnN1ePkVLiKTQ1XT1NZbMyZZhzMnSEpUBiojSN2NVEDiUAdCQQkwbWDYDm74aWksUD7wMqo9EufFfwDw92PPenx
+Your transaction signature 3frEHEMbWFwvWmq8GgM1H9zvHiaRwPY1296GHCoKasYC1zzHfLbjfALDQVojdPGDBNESLNenemmh5EComAt97BvG
     ✔ Is initialized! (1525ms)
-
 
   1 passing (2s)
 ```
 
 Điều này xác nhận rằng quá trình nâng cấp của bạn đã thành công và mã mới, bao gồm cả hàm `initialize()` đã cập nhật của bạn, đang chạy bình thường.  
-Nếu bạn muốn xem lại kết quả nhật ký, bạn có thể kiểm tra giao dịch trên [Solscan](https://solscan.io/txhnN1ePkVLiKTQ1XT1NZbMyZZhzMnSEpUBiojSN2NVEDiUAdCQQkwbWDYDm74aWksUD7wMqo9EufFfwDw92PPenx?cluster=devnet)
+Nếu bạn muốn xem lại kết quả nhật ký, bạn có thể kiểm tra giao dịch trên [Solscan](https://solscan.io/3frEHEMbWFwvWmq8GgM1H9zvHiaRwPY1296GHCoKasYC1zzHfLbjfALDQVojdPGDBNESLNenemmh5EComAt97BvG?cluster=devnet)
 
 <img src="../Example Images/02-UpgradeProgramLog.png" alt="upgrade program log" width="1000" height="300">
 

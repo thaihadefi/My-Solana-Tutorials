@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-my_first_anchor_project = "EfBMUxsHSmhriWZfWNvLoqtsneUh1UFe9bmLmqB38taJ"
+my_first_anchor_project = "Ar5e5K3u6c7hhn3YMiHhxsJDcAGFUe5r7WVKKZ9v3fUD"
 
 [registry]
 url = "https://api.apr.dev"
