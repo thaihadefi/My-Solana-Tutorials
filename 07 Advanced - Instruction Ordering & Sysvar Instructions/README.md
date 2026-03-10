@@ -1,27 +1,26 @@
-# 07 – Thứ tự Chỉ dẫn, Sysvar & Các Ràng buộc Runtime
+# 07 – Instruction Ordering, Sysvar 
 
-Trong bài học này, chúng ta sẽ đi sâu vào cách Solana thực thi các chỉ dẫn trong một giao dịch và tại sao thứ tự của các chỉ dẫn đó lại quan trọng. Bạn sẽ học cách sử dụng tài khoản **Sysvar Instructions** để tự kiểm tra chỉ dẫn (instruction introspection), cho phép các chương trình on-chain của bạn kiểm tra và thực thi các ràng buộc đối với giao dịch mà chúng đang chạy.
+Trong bài học này, chúng ta sẽ đi sâu vào cách Solana thực thi các instruction trong một giao dịch và tại sao thứ tự của các instruction đó lại quan trọng. Bạn sẽ học cách sử dụng tài khoản **Sysvar Instructions** để sắp xếp thứ tự các instruction, cho phép các chương trình on-chain của bạn kiểm tra và thực thi các ràng buộc đối với giao dịch mà chúng đang chạy.
 
 ---
 
 Trước khi bắt đầu bài học này, bạn nên nắm vững:
 
-- **PDAs (Program Derived Addresses)** – Hiểu cách các chương trình tạo ra và sở hữu tài khoản
-- **ATAs (Associated Token Accounts)** – Các mô hình quản lý tài khoản token
+- **PDAs (Program Derived Addresses)** – Hiểu cách các chương trình tạo ra và sở hữu account
+- **ATAs (Associated Token Accounts)** – Các mô hình quản lý token account
 - **CPI (Cross-Program Invocation)** – Cách các chương trình gọi các chương trình khác
-- **Cấu trúc giao dịch** – Các tài khoản, người ký, chỉ dẫn
+- **Cấu trúc giao dịch** – Các account, signer, instruction
 Nếu bạn cần ôn lại, hãy xem lại các bài học trước (03, 04, 05) trong khóa học này.
 
 ---
 
 Đến cuối bài học này, bạn sẽ nắm được:
 
-- Cách Solana thực thi các chỉ dẫn: tuần tự và nguyên tử (atomic)
-- Tại sao thứ tự chỉ dẫn ảnh hưởng đến bảo mật, tính chính xác và khả năng kết hợp
-- Cách sử dụng tài khoản Sysvar Instructions để tự kiểm tra chỉ dẫn
-- Cách thực thi thứ tự chỉ dẫn bên trong các chương trình on-chain
-- Khi nào nên sử dụng `invoke_signed` thay vì CPI để kiểm soát sự tăng trưởng của ngăn xếp chỉ dẫn (instruction stack)
-- Cách kích thước ngăn xếp và giới hạn tài khoản của Solana ảnh hưởng đến các giao dịch phức tạp
+- Tại sao thứ tự instruction ảnh hưởng đến bảo mật
+- Cách sử dụng tài khoản Sysvar Instructions để tự kiểm tra instruction
+- Cách thực thi theo thứ tự các instruction bên trong các chương trình on-chain
+- Khi nào nên sử dụng `invoke_signed` thay vì CPI để kiểm soát số lượng instruction (instruction stack)
+- Cách kích thước ngăn xếp và giới hạn account của Solana ảnh hưởng đến các giao dịch phức tạp
 - Các chiến lược thực tế để thiết kế giao dịch không vượt quá giới hạn runtime
 - Cách kiểm tra và gỡ lỗi các giao dịch phụ thuộc vào thứ tự chỉ dẫn
 
@@ -29,7 +28,7 @@ Nếu bạn cần ôn lại, hãy xem lại các bài học trước (03, 04, 05
 
 ## Cách Solana thực thi các Giao dịch 
 
-Một giao dịch Solana là một tập hợp các chỉ dẫn được thực thi tuần tự bởi runtime, nó thực thi chúng **theo thứ tự**, **từng cái một**:
+Một giao dịch Solana là một tập hợp các instruction được thực thi tuần tự bởi runtime, nó thực thi chúng **theo thứ tự**, **từng cái một**:
 
 ```
 Transaction {

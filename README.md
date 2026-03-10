@@ -3,6 +3,4 @@ Solana Tutorials là khoá học được thiết kế nhằm giúp các nhà ph
 
 Mục tiêu của tôi là chia nhỏ các khái niệm phức tạp thành các bước nhỏ, rõ ràng — giúp bạn tạo ra các dapp nhanh chóng, an toàn và có thể mở rộng bằng các công cụ hiện đại như khung Anchor và Solana CLI.
 
-Bằng cách làm việc qua các ví dụ này, bạn sẽ không chỉ đạt được các kỹ năng kỹ thuật mà còn hiểu sâu hơn về cách Solana hoạt động — từ các hợp đồng thông minh đến các giao dịch, PDA, và hơn thế nữa.
-
-Không rườm rà. Chỉ tập trung vào việc học tập sạch sẽ — được xây dựng bởi các nhà phát triển, dành cho các nhà phát triển.
+Bằng cách hoàn thành khoá học, bạn sẽ không chỉ đạt được các kỹ năng  mà còn hiểu sâu hơn về cách Solana hoạt động — từ các hợp đồng thông minh đến các giao dịch, PDA, và hơn thế nữa.
