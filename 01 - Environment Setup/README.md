@@ -4,9 +4,9 @@ Trước khi viết hoặc triển khai các smart contract trên Solana, chúng
 ### Trong phần này, bạn sẽ:
 ✅ Cài đặt Rust, ngôn ngữ lập trình được sử dụng để viết các chương trình Solana  
 ✅ Cài đặt Solana CLI, cho phép bạn tương tác với blockchain Solana thông qua các câu lệnh từ terminal 
-✅ Cài đặt Anchor, bộ công cụ phổ biến nhất để phát triển Solana  
+✅ Cài đặt Anchor framework, bộ công cụ phổ biến nhất để lập trình trên Solana  
 
-Đến cuối phần này, bạn sẽ có mọi thứ cần thiết để xây dựng, kiểm tra và triển khai các smart contract Solana trên Devnet.
+Sau khi hoàn thành phần này, bạn sẽ có mọi thứ cần thiết để xây dựng, kiểm thử và triển khai các smart contract Solana trên Devnet.
 
 ### CÂU LỆNH CÀI ĐẶT TẤT CẢ CÁC THƯ VIỆN
 ```
@@ -60,12 +60,12 @@ rustup default 1.89.0
 
 Để tương tác với blockchain Solana, bạn cần cài đặt CLI của Solana. Solana CLI cung cấp các lệnh để tạo ví, triển khai smart contract và gửi giao dịch.
 
-Chạy lệnh sau để tải xuống và cài đặt Solana CLI:
+Chạy lệnh sau để cài đặt Solana CLI:
 ```bash
 sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.8/install)"
 ```
 
-Sau khi cài đặt, hãy cập nhật môi trường của bạn để lệnh `solana` có sẵn:
+Sau khi cài đặt, hãy cập nhật môi trường của bạn để lệnh `solana` có thể sử dụng được:
 ```bash
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 ```
@@ -118,7 +118,7 @@ Nhập mảng này vào Ví Phantom và bật Chế độ Testnet:
 
 ### 3. Cài đặt Anchor CLI
 
-Anchor là bộ khung để phát triển các smart contract trên Solana. Anchor tận dụng các Rust macro để đơn giản hóa quá trình viết các smart contract trên Solana.
+Anchor là một framework để phát triển các smart contract trên Solana. Anchor tận dụng các Rust macro để đơn giản hóa quá trình viết code.
 Trình quản lý phiên bản Anchor (AVM) cho phép bạn cài đặt và quản lý các phiên bản Anchor khác nhau trên hệ thống của mình và dễ dàng cập nhật các phiên bản Anchor trong tương lai.
 
 Cài đặt AVM bằng lệnh sau:
@@ -131,7 +131,7 @@ Xác nhận rằng AVM đã được cài đặt thành công:
 avm --version
 ```
 
-Hầu hết các giao thức Solana lớn (tính đến ngày 14 tháng 5 năm 2025) - như Jito, Jupiter, Raydium, Orca,... - vẫn sử dụng Anchor 0.29.0 trong các smart contract của họ. Tuy nhiên, phiên bản này đã cũ, chúng ta cần sử dụng v0.30 trở lên, phiên bản phù hợp nhất là 0.31.1.
+Hầu hết các giao thức Solana lớn (tính đến ngày 14 tháng 5 năm 2025) - như Jito, Jupiter, Raydium, Orca,... - vẫn sử dụng Anchor 0.29.0 trong các smart contract của họ. Tuy nhiên, phiên bản này đã cũ, chúng ta cần sử dụng v0.30 trở lên, phiên bản ổn định nhất là 0.31.1.
 ```bash
 avm use 0.31.1
 ```
