@@ -197,7 +197,7 @@ Phần Errors:
 }
 ```
 
-## Từ IDL Tạo Program Interface 
+## Từ IDL Tạo Program Interface
 
 Bạn có bao giờ thắc mắc rằng nếu chúng ta có một IDL, liệu chúng ta có thể tạo program interface, hoặc CPI để tương tác với program đó không? Có, và [github repo này](https://github.com/saber-hq/anchor-gen) sẽ giúp bạn làm điều đó.
 Hướng dẫn trong repo không đủ rõ ràng nên tôi sẽ giúp bạn.
@@ -232,4 +232,113 @@ Và bạn đã sẵn sàng.
 
 ## Bài tập
 
+### Bài tập 1: Tạo CPI Crate từ IDL
+
 Bây giờ hãy tự thực hành. Sử dụng `anchor-gen`, chuyển đổi file idl.json (từ staking-app), sử dụng CPI được tạo ra đó, thay đổi phần import trong `bank-app`, và chạy thử nghiệm (test). Kết quả sẽ tương tự như phiên bản mã nguồn cũ của bạn, khi không sử dụng crate.
+
+### Bài tập 2: Sử dụng IDL phía Client (TypeScript)
+
+Trong thực tế, khi bạn muốn tương tác với một program bên thứ ba (ví dụ: Jupiter, Marinade...), bạn không có source code trong workspace — bạn chỉ có file IDL. Bài tập này giúp bạn hiểu cách sử dụng IDL để tương tác với program mà không cần source code.
+
+Mở file `tests/idl-client-side.ts`, bạn sẽ thấy phần `describe("IDL Client-side")` với các test cần hoàn thành.
+
+**Load IDL và tạo Program instance**
+
+Thay vì dùng `anchor.workspace.StakingApp`, hãy tạo Program instance bằng `new Program(idl, provider)`
+
+**1. Derive PDA từ thông tin seeds trong IDL**
+
+Trong IDL, PDA seeds được lưu dưới dạng byte array. Ví dụ:
+
+```json
+"pda": {
+  "seeds": [
+    { "kind": "const", "value": [83, 84, 65, 75, 73, 78, 71, 95, 86, 65, 85, 76, 84] }
+  ]
+}
+```
+
+Mỗi số là một mã ASCII. Hãy:
+
+- Đọc seeds từ IDL (`stakingProgram.idl.instructions[...]`)
+- Convert byte array thành `Buffer` bằng `Buffer.from(seedBytes)`
+- Dùng `PublicKey.findProgramAddressSync` để derive PDA
+- So sánh kết quả với PDA derive "thông thường" (dùng `Buffer.from("STAKING_VAULT")`)
+
+Lưu ý: Seed loại `"kind": "const"` là giá trị cố định, seed loại `"kind": "account"` là public key của một account khác (bạn phải tự cung cấp giá trị).
+
+**2. Fetch và decode account data**
+
+Sau khi tạo Program instance từ IDL, dùng `stakingProgram.account.userInfo.fetch(...)` để đọc dữ liệu on-chain. Anchor SDK tự biết cách decode nhờ phần `types` trong IDL.
+
+### Bài tập 3: Gọi Program Thông Qua Raw Instruction
+
+Thay vì dùng Anchor CPI hay `anchor-gen`, bạn sẽ gọi staking-app
+hoàn toàn thủ công bằng cách tự build instruction data từ discriminator.
+Đây là cách duy nhất khi bạn chỉ có IDL và không có bất kỳ crate nào hỗ trợ.
+
+#### 1. Tìm discriminator từ IDL
+
+Anchor tính discriminator bằng `sha256("global:<instruction_name>")[0..8]`.
+Tính discriminator của instruction `stake` trong TypeScript:
+```typescript
+import { utils } from "@coral-xyz/anchor";
+
+const discriminator = utils.sha256.hash("global:stake").slice(0, 8);
+```
+
+Sau đó xác nhận lại bằng cách so sánh với discriminator
+trong `idl.json` (nếu có field này).
+
+#### 2. Gọi từ on-chain program bằng invoke
+
+Trong một program Rust mới (không phải staking-app), dùng `invoke`
+để gọi staking-app với raw instruction data:
+```rust
+use solana_program::{
+    account_info::AccountInfo,
+    instruction::{AccountMeta, Instruction},
+    program::invoke,
+    pubkey::Pubkey,
+};
+
+pub fn call_stake_raw(
+    accounts: &[AccountInfo],
+    staking_program_id: &Pubkey,
+    amount: u64,
+    is_stake: bool,
+) -> ProgramResult {
+    // TODO: Build instruction data
+    // - Discriminator: lấy từ idl
+    // - amount: to_le_bytes() → 8 bytes
+    // - is_stake: 1 byte (1 hoặc 0)
+    let mut data: Vec = vec![];
+    // TODO
+
+    // TODO: Build AccountMeta list theo đúng thứ tự IDL
+    let account_metas = vec![
+        // TODO
+    ];
+
+    let instruction = Instruction {
+        program_id: *staking_program_id,
+        accounts: account_metas,
+        data,
+    };
+
+    // TODO: Gọi invoke với instruction và account_infos tương ứng
+
+    Ok(())
+}
+```
+
+#### 4. Viết test xác nhận
+
+Từ TypeScript test, gọi program mới của bạn, program đó sẽ forward sang staking-app. Assert rằng kết quả giống hệt gọi với CPI.
+
+---
+
+**Điểm mấu chốt cần hiểu**: Mọi CPI của Anchor, mọi `anchor-gen`,
+cuối cùng đều làm đúng 3 việc này — tính discriminator, serialize args,
+build `AccountMeta` list. Khi bạn làm thủ công một lần, bạn hiểu
+tất cả các abstraction bên trên đang làm gì.

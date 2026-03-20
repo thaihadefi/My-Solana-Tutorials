@@ -668,3 +668,13 @@ Yêu cầu:
 - So sánh `Account<T>` thông thường vs `AccountLoader<T>`
 - Đo lường xem phương pháp nào tránh được tràn ngăn xếp. Quan sát cách một `Account<T>` thông thường quy mô lớn gặp lỗi giới hạn ngăn xếp BPF tại thời điểm build, trong khi một `AccountLoader<T>` zero-copy có thể xử lý cùng một kích thước dữ liệu một cách an toàn.
 
+### Phần 3: Remaining Accounts
+
+Xây dựng instruction `multi_send` cho phép gửi SOL đến nhiều địa chỉ cùng lúc mà không cần hardcode danh sách người nhận vào `Accounts` struct.
+
+Yêu cầu:
+- Danh sách người nhận được truyền vào qua `remaining_accounts` thay vì khai báo trong struct — đây là cách tránh tốn stack space cho các account có số lượng biến động
+- Áp đặt giới hạn: ít nhất 1 người nhận, tối đa 10 người nhận
+- Kiểm tra từng account trong `remaining_accounts` phải có `is_writable = true`
+- Viết test bao gồm các trường hợp: không có người nhận, quá nhiều người nhận, account không writable, và trường hợp thành công với 3 người nhận
+

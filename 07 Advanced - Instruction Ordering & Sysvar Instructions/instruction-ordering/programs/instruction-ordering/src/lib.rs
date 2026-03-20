@@ -175,10 +175,31 @@ pub struct ProcessLargeApprovalZeroCopy<'info> {
     pub authority: Signer<'info>,
 }
 
+// ---------------- Part 3 Accounts ----------------
+ 
+#[derive(Accounts)]
+pub struct MultiSend<'info> {
+    /// Người gửi — bị debit lamport
+    #[account(mut)]
+    pub sender: Signer<'info>,
+ 
+    pub system_program: Program<'info, System>,
+    // remaining_accounts
+}
+
 // ---------------- Errors ----------------
 
 #[error_code]
 pub enum ErrorCode {
     #[msg("Must approve before executing")]
     MustApproveFirst,
+
+    #[msg("Must provide at least one recipient")]
+    NoRecipients,
+ 
+    #[msg("Too many recipients, maximum is 10")]
+    TooManyRecipients,
+ 
+    #[msg("Recipient account must be writable")]
+    RecipientNotWritable,
 }
