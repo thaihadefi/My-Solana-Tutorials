@@ -1,6 +1,6 @@
-# Phần VI - Versioned Transaction
+# Phần V - Versioned Transaction
 
-Vậy là bạn đã hoàn thành 5 bài học cơ bản đầu tiên! Chúc mừng bạn! Đã đến lúc tìm hiểu sâu hơn về Solana. Hãy bắt đầu với bài học nâng cao đầu tiên: Versioned Transaction.
+Vậy là bạn đã hoàn thành 4 bài học cơ bản đầu tiên! Chúc mừng bạn! Đã đến lúc tìm hiểu sâu hơn về Solana. Hãy bắt đầu với bài học nâng cao đầu tiên: Versioned Transaction.
 
 Tính năng này cho phép bạn bao gồm nhiều account hơn trong một giao dịch duy nhất, giúp xây dựng các giao thức DeFi phức tạp hơn, các sàn giao dịch NFT và các ứng dụng khác yêu cầu tương tác với nhiều tài khoản cùng lúc. 
 

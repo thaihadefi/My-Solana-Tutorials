@@ -1,4 +1,4 @@
-# Phần IV - Tài khoản Token Liên kết (ATA)
+# Phần III - Tài khoản Token Liên kết (ATA)
 
 Bây giờ bạn đã học cách sử dụng các PDA để quản lý các tài khoản tùy chỉnh, đã đến lúc làm chủ một thành phần cơ bản khác trong phát triển Solana — Tài khoản Token Liên kết (Associated Token Accounts - ATAs). Đây là các tài khoản đặc biệt được sử dụng để lưu trữ các token SPL.
 

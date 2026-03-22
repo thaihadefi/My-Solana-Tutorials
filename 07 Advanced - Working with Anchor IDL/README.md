@@ -1,4 +1,4 @@
-# 08 – Làm việc với Anchor IDL
+# Phần VII - Làm việc với Anchor IDL
 
 Bài học trước thật khó khăn phải không? Đừng lo lắng! Bài này sẽ rất dễ hiểu hơn nhiều.
 

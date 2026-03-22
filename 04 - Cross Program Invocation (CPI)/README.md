@@ -1,4 +1,4 @@
-# Phần Năm - Gọi chương trình Chéo (CPI)
+# Phần IV - Gọi chương trình Chéo (CPI)
 
 Bây giờ bạn đã biết cách làm việc với token và ATA, đã đến lúc khám phá một trong những tính năng mạnh mẽ nhất của các hợp đồng thông minh Solana — Gọi Chương trình Chéo (Cross-Program Invocations - CPIs).
 

@@ -1,4 +1,4 @@
-# 07 – Instruction Ordering, Sysvar
+# Phần VI - Instruction Ordering, Sysvar
 
 Trong bài học này, chúng ta sẽ đi sâu vào cách Solana thực thi các instruction trong một giao dịch và tại sao thứ tự của các instruction đó lại quan trọng. Bạn sẽ học cách sử dụng tài khoản **Sysvar Instructions** để sắp xếp thứ tự các instruction, cho phép các chương trình on-chain của bạn kiểm tra và áp đặt các ràng buộc lên với transaction mà chúng đang chạy.
 

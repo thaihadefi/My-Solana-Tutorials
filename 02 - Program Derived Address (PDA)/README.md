@@ -1,4 +1,4 @@
-# Phần III - PDA
+# Phần II - PDA
 
 Bây giờ bạn đã quen với việc viết các smart contract cơ bản trên Solana, đã đến lúc tìm hiểu một trong những khái niệm quan trọng nhất trong phát triển Solana — Program Derived Addresses - PDAs. Các account đặc biệt này đóng vai trò cốt lõi để xây dựng các smart contract an toàn, có trạng thái (stateful), có thể lưu trữ dữ liệu người dùng, quản lý kho lưu trữ (vaults), kiểm soát authority, và hơn thế nữa.
 

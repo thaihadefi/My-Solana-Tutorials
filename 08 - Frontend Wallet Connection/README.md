@@ -1,4 +1,4 @@
-# Phần IX - Frontend: Kết nối Ví Phantom và Tương tác với Solana Program
+# Phần VIII - Frontend: Kết nối Ví Phantom và Tương tác với Solana Program
 
 Qua các bài học trước, bạn đã viết smart contract, test bằng script, làm việc với PDA, CPI, IDL... Tất cả đều chạy trong terminal. Nhưng người dùng thực sự không dùng terminal — họ dùng trình duyệt web. Đã đến lúc kết nối mọi thứ lại và xây dựng giao diện cho Bank App của bạn!
 
@@ -213,15 +213,15 @@ function WalletInfo() {
 
 Đây là phần thú vị nhất — bạn sẽ kết nối kiến thức từ các bài học trước:
 
-- **Chương 8 (IDL)**: Dùng IDL để tạo Program instance
-- **Chương 3 (PDA)**: Derive các PDA addresses phía client
-- **Chương 3 (Deposit)**: Gọi instruction deposit
+- **Chương 7 (IDL)**: Dùng IDL để tạo Program instance
+- **Chương 2 (PDA)**: Derive các PDA addresses phía client
+- **Chương 2 (Deposit)**: Gọi instruction deposit
 
 ### Bước 1: Copy IDL
 
 Sau khi `anchor build` ở Bank App, bạn sẽ có file `target/idl/bank_app.json`. Copy file này vào `src/idl/bank_app.json` trong dự án frontend.
 
-IDL chính là "cầu nối" giữa frontend và smart contract — nó cho Anchor SDK biết program có những instruction nào, cần account nào, và kiểu dữ liệu ra sao. Đúng như bạn đã học ở Chương 8.
+IDL chính là "cầu nối" giữa frontend và smart contract — nó cho Anchor SDK biết program có những instruction nào, cần account nào, và kiểu dữ liệu ra sao. Đúng như bạn đã học ở Chương 7.
 
 ### Bước 2: Tạo AnchorProvider từ Wallet
 
@@ -249,7 +249,7 @@ import idl from '../idl/bank_app.json';
 const program = new Program(idl as any, provider);
 ```
 
-Giống hệt cách bạn đã làm ở Bài tập 2 Chương 8 — chỉ khác là thay vì dùng `anchor.workspace`, bạn dùng `new Program(idl, provider)` với IDL file.
+Giống hệt cách bạn đã làm ở Bài tập 2 Chương 7 — chỉ khác là thay vì dùng `anchor.workspace`, bạn dùng `new Program(idl, provider)` với IDL file.
 
 ### Bước 4: Derive PDA phía client
 
@@ -272,7 +272,7 @@ const [userReserve] = PublicKey.findProgramAddressSync(
 );
 ```
 
-Đây chính xác là cách bạn đã làm trong `tests/bank-app.ts` ở Chương 3 — vì PDA là deterministic, cùng seeds + program ID sẽ luôn cho ra cùng địa chỉ, dù ở test hay frontend.
+Đây chính xác là cách bạn đã làm trong `tests/bank-app.ts` ở Chương 2 — vì PDA là deterministic, cùng seeds + program ID sẽ luôn cho ra cùng địa chỉ, dù ở test hay frontend.
 
 ### Bước 5: Gọi instruction Deposit
 
