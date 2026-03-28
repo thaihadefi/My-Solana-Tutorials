@@ -50,10 +50,16 @@ function useBankApp() {
     const pdas = getPDAs();
     if (!pdas) return;
 
+    console.log("hello");
+
     try {
+      console.log(pdas.userReserve.toString())
+      console.log((program.account as any).userReserve)
       const data = await (program.account as any).userReserve.fetch(pdas.userReserve);
+      console.log(data)
       setUserReserve(data.depositedAmount.toNumber() / LAMPORTS_PER_SOL);
     } catch {
+      console.error("fetchUserReserve error:");
       setUserReserve(0);
     }
   }, [program, wallet, getPDAs]);
