@@ -1,8 +1,6 @@
-.history
-.github/copilot-instructions.md
-
-
-# Added by cargo
-
-/target
+target/
 node_modules/
+.surfpool
+runbooks
+target/
+.anchor

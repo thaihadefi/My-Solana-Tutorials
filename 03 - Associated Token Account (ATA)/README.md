@@ -29,12 +29,12 @@ ATA thực chất là một PDA (Program Derived Address) — nó không đượ
 ```ts
 [
   wallet_address,                 // Địa chỉ ví của chủ sở hữu token
-  token_program_id,              // ID của chương trình SPL token
+  token_program_id,              // ID của program SPL token
   mint_address                   // Địa chỉ đúc (mint) của SPL token
 ]
 ```
 
-Địa chỉ ATA được xác định bằng cách sử dụng hàm `find_program_address` với các seed trên và với ID chương trình token liên kết là ID chương trình. Vì vậy trong mã nguồn, nó đại loại như sau:
+Địa chỉ ATA được xác định bằng cách sử dụng hàm `find_program_address` với các seed trên và với ID program token liên kết là ID program. Vì vậy trong mã nguồn, nó đại loại như sau:
 
 ```ts
 Pubkey.findProgramAddressSync(
@@ -199,8 +199,8 @@ export function getAssociatedTokenAddressSync(
 - `mint`: Địa chỉ đúc (mint) của token.
 - `owner`: Ví hoặc PDA sẽ sở hữu tài khoản token liên kết.
 - `allowOwnerOffCurve`: Nếu là `true`, cho phép địa chỉ ngoài đường cong (tức là PDA hoặc địa chỉ không ký) làm chủ sở hữu. Mặc định là `false`.
-- `programId`: Chỉ định chương trình token nào sẽ sử dụng. Mặc định là `TOKEN_PROGRAM_ID` (SPL Token v1 cổ điển). Nếu bạn đang làm việc với các token sử dụng các tính năng như phí giao dịch hoặc giao dịch ẩn danh, bạn nên sử dụng `TOKEN_2022_PROGRAM_ID` mới hơn.
-- `associatedTokenProgramId`: ID chương trình token. Thường được để mặc định là `ASSOCIATED_TOKEN_PROGRAM_ID` cho cả hai tiêu chuẩn token.
+- `programId`: Chỉ định program token nào sẽ sử dụng. Mặc định là `TOKEN_PROGRAM_ID` (SPL Token v1 cổ điển). Nếu bạn đang làm việc với các token sử dụng các tính năng như phí giao dịch hoặc giao dịch ẩn danh, bạn nên sử dụng `TOKEN_2022_PROGRAM_ID` mới hơn.
+- `associatedTokenProgramId`: ID program token. Thường được để mặc định là `ASSOCIATED_TOKEN_PROGRAM_ID` cho cả hai tiêu chuẩn token.
 
 Nếu bạn đang tạo ATA cho một PDA (như kho lưu trữ/vault), hãy nhớ đặt `allowOwnerOffCurve = true`, vì các PDA được thiết kế là ngoài đường cong.  
 Ví dụ:
@@ -275,12 +275,12 @@ Quy trình diễn ra như sau:
 - Nếu không, instruction tạo ATA sẽ được thêm vào `preInstructions`.
 - Các `preInstructions` này chạy trước instruction `depositToken` chính, đảm bảo mọi thứ được thiết lập đúng cách.
 
-⚠️ Nếu bạn bỏ qua bước `createAssociatedTokenAccountInstruction` và ATA không tồn tại, chương trình của bạn sẽ trả về lỗi — token không thể được gửi vào một tài khoản không tồn tại.
+⚠️ Nếu bạn bỏ qua bước `createAssociatedTokenAccountInstruction` và ATA không tồn tại, program của bạn sẽ trả về lỗi — token không thể được gửi vào một tài khoản không tồn tại.
 
 🎉 Chúc mừng! Bây giờ bạn đã:  
 ✅ Học cách lấy ATA bằng `@solana/spl-token`  
-✅ Tạo ATA cho cả người dùng và các PDA do chương trình sở hữu  
-✅ Tích hợp chỉ dẫn tạo ATA vào một giao dịch Anchor  
+✅ Tạo ATA cho cả người dùng và các PDA do program sở hữu  
+✅ Tích hợp instruction tạo ATA vào một giao dịch Anchor  
 
 ### 4. Đến lúc Xây dựng 💪
 

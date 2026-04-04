@@ -60,7 +60,7 @@ pub struct Stake<'info> {
     /// CHECK:
     #[account(
         init_if_needed,
-        payer = user,
+        payer = payer,
         seeds = [b"STAKING_VAULT"],
         bump,
         space = 0,
@@ -72,13 +72,15 @@ pub struct Stake<'info> {
         init_if_needed,
         seeds = [b"USER_INFO", user.key().as_ref()],
         bump,
-        payer = user,
+        payer = payer,
         space = 8 + std::mem::size_of::<UserInfo>(),
     )]
     pub user_info: Box<Account<'info, UserInfo>>,
 
     #[account(mut)]
     pub user: Signer<'info>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 

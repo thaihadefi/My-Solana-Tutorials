@@ -1,15 +1,15 @@
 :root {
   --bg-primary: #0f0f1a;
-  --bg-secondary: #1a1a2e;
-  --bg-card: #16213e;
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0b0;
+  --bg-secondary: #171726;
+  --bg-card: rgba(25, 25, 39, 0.9);
+  --text-primary: #f1f3ff;
+  --text-secondary: #9ea3b7;
   --accent: #9945ff;
   --accent-hover: #7b34d9;
   --success: #14f195;
   --error: #f44;
-  --border: #2a2a4a;
-  --radius: 12px;
+  --border: rgba(255, 255, 255, 0.06);
+  --radius: 24px;
 }
 
 * {
@@ -26,42 +26,52 @@ body {
 }
 
 .app {
-  max-width: 560px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem 3rem;
 }
 
 .app-header {
+  margin-bottom: 1.5rem;
+}
+
+.app-header-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.app-brand {
   text-align: center;
-  margin-bottom: 2rem;
 }
 
 .app-header h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
 }
 
 .app-subtitle {
   color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
 }
 
 .wallet-connect {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .wallet-connect .wallet-adapter-button {
-  background: var(--accent) !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  transition: background 0.2s !important;
+  background: linear-gradient(90deg, #8c3fff 0%, #b26fff 100%) !important;
+  border-radius: 16px !important;
+  font-weight: 700 !important;
+  min-height: 52px !important;
+  box-shadow: 0 10px 26px rgba(151, 66, 253, 0.22);
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
 }
 
 .wallet-connect .wallet-adapter-button:hover {
-  background: var(--accent-hover) !important;
+  transform: translateY(-1px);
 }
 
 .connect-prompt {
@@ -85,116 +95,176 @@ body {
 .app-main {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .card {
-  background: var(--bg-card);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.5rem 1.6rem;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
 }
 
-.card h3 {
+.bank-interact {
+  padding: 0.55rem;
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.trade-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+}
+
+.trade-tab {
+  flex: 1;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--text-secondary);
   font-size: 1.1rem;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.info-row {
+.trade-tab:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.trade-tab.active {
+  background: rgba(255, 255, 255, 0.05);
+  color: #bc8cff;
+}
+
+.trade-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.trade-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
 }
 
-.info-row:last-of-type {
-  border-bottom: none;
-}
-
-.label {
+.trade-label {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.value {
-  font-weight: 600;
-  font-size: 0.95rem;
+.trade-balance {
+  color: #bc8cff;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
-.value.highlight {
-  color: var(--success);
-  font-size: 1.1rem;
-}
-
-.deposit-form {
-  display: flex;
+.trade-form-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
   gap: 0.75rem;
-  margin: 1.25rem 0;
 }
 
-.deposit-form input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-primary);
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.deposit-form input:focus {
-  border-color: var(--accent);
-}
-
-.deposit-form input::placeholder {
-  color: var(--text-secondary);
-}
-
-.btn {
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--accent-hover);
-}
-
-.btn-secondary {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+.trade-token-button {
   width: 100%;
-  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #06080c;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 1rem;
+  color: #fff;
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background: var(--border);
-  color: var(--text-primary);
+.trade-token-button-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trade-token-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(153, 69, 255, 0.18);
+  color: #bc8cff;
+  font-size: 0.95rem;
+}
+
+.trade-token-symbol {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.trade-amount-field {
+  position: relative;
+}
+
+.trade-amount-field input {
+  width: 100%;
+  background: #06080c;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: right;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trade-amount-field input:focus {
+  border-color: rgba(153, 69, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.12);
+}
+
+.trade-amount-field input::placeholder {
+  color: #313756;
+}
+
+.trade-submit-button {
+  width: 100%;
+  padding: 1.1rem 1.25rem;
+  border: none;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, #9742fd 0%, #c798ff 100%);
+  color: #2e0e53;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 0 10px 30px rgba(151, 66, 253, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.trade-submit-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.trade-submit-button:disabled,
+.trade-tab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .tx-result {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 0.9rem;
 }
 
@@ -217,7 +287,27 @@ body {
 }
 
 @media (max-width: 480px) {
-  .deposit-form {
-    flex-direction: column;
+  .app {
+    padding-top: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 2.35rem;
+  }
+
+  .trade-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trade-tab {
+    font-size: 1rem;
+  }
+
+  .trade-amount-field input {
+    font-size: 1.5rem;
+  }
+
+  .trade-submit-button {
+    font-size: 1rem;
   }
 }
