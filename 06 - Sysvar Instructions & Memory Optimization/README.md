@@ -1,4 +1,4 @@
-# Phần VI - Thứ tự Instruction và Sysvar Instructions
+# Phần VI - Sysvar Instructions & Memory Optimization
 
 Bài học này tập trung vào hai chủ đề liên quan chặt chẽ: **cách Solana thực thi các instruction trong một giao dịch** và **cách program on-chain có thể kiểm tra (introspect) các instruction khác trong cùng giao dịch** thông qua Sysvar Instructions. Ngoài ra, bạn sẽ học các giới hạn runtime quan trọng cùng các kỹ thuật tối ưu hóa bộ nhớ mà bất kỳ nhà phát triển Solana nào cũng cần nắm vững.
 
@@ -6,11 +6,11 @@ Bài học này tập trung vào hai chủ đề liên quan chặt chẽ: **các
 
 Kết thúc bài học, bạn sẽ:
 
-- Hiểu mô hình thực thi tuần tự và nguyên tử của Solana
-- Biết tại sao thứ tự instruction ảnh hưởng đến tính đúng đắn và bảo mật
-- Sử dụng Sysvar Instructions để kiểm tra và áp đặt ràng buộc giữa các instruction
-- Nắm các giới hạn runtime: CPI depth, call stack, compute budget, stack frame
-- Áp dụng các kỹ thuật tối ưu hóa: `Box`, zero-copy, `remaining_accounts`, `#[inline(never)]`
+✅ Hiểu mô hình thực thi tuần tự và nguyên tử của Solana
+✅ Biết tại sao thứ tự instruction ảnh hưởng đến tính đúng đắn và bảo mật
+✅ Sử dụng Sysvar Instructions để kiểm tra và áp đặt ràng buộc giữa các instruction
+✅ Nắm các giới hạn runtime: CPI depth, call stack, compute budget, stack frame
+✅ Áp dụng các kỹ thuật tối ưu hóa: Box, zero-copy, remaining_accounts, #[inline(never)], UncheckedAccount
 
 ---
 

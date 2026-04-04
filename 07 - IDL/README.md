@@ -4,13 +4,13 @@ Sau những bài học nặng về runtime constraint và tối ưu hóa, bài n
 
 Đến cuối bài học, bạn sẽ:
 
-- Hiểu IDL là gì, tại sao nó tồn tại, và nó chứa những gì
-- Biết cách Anchor sinh IDL từ mã nguồn Rust
-- Hiểu cơ chế discriminator của Anchor
-- Biết cách tìm IDL của program bên thứ ba khi không có source code
-- Biết cách tạo CPI crate từ IDL bằng `anchor-gen`
-- Biết cách sử dụng IDL từ TypeScript client mà không cần source code
-- Hiểu `**invoke` và `invoke_signed`** trong CPI khi bạn tự build instruction từ IDL (hoặc raw), và **khi nào** gọi trực tiếp thay vì Anchor CPI wrapper
+✅ Hiểu IDL là gì, tại sao nó tồn tại, và nó chứa những gì
+✅ Biết cách Anchor sinh IDL từ mã nguồn Rust
+✅ Hiểu cơ chế discriminator của Anchor
+✅ Biết cách tìm IDL của program bên thứ ba khi không có source code
+✅ Biết cách tạo CPI crate từ IDL bằng `anchor-gen`
+✅ Biết cách sử dụng IDL từ TypeScript client mà không cần source code
+✅ Hiểu `**invoke` và `invoke_signed`** trong CPI khi bạn tự build instruction từ IDL (hoặc raw), và **khi nào** gọi trực tiếp thay vì Anchor CPI wrapper
 
 ---
 
