@@ -72,7 +72,7 @@ describe("bank-app", () => {
   });
 
   it("Is deposited token!", async () => {
-    let tokenMint = new PublicKey("FBUoe8bLbPBh4VcF4jwg1L53XZBdSJoERry16u26UnNL") //you should put your token mint here
+    let tokenMint = new PublicKey("") // Điền token mint của bạn vào
     let userAta = getAssociatedTokenAddressSync(tokenMint, provider.publicKey)
     let bankAta = getAssociatedTokenAddressSync(tokenMint, BANK_APP_ACCOUNTS.bankVault, true)
 

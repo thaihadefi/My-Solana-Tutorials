@@ -1,6 +1,5 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import WalletConnect from './components/WalletConnect';
-import WalletInfo from './components/WalletInfo';
 import BankAppInteract from './components/BankAppInteract';
 
 function App() {
@@ -9,21 +8,24 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🏦 Bank App</h1>
-        <p className="app-subtitle">Solana dApp on Devnet</p>
-        <WalletConnect />
+        <div className="app-header-top">
+          <WalletConnect />
+        </div>
+        <div className="app-brand">
+          <h1>🏦 Bank App</h1>
+          <p className="app-subtitle">Solana dApp on Devnet</p>
+        </div>
       </header>
 
       <main className="app-main">
         {connected ? (
           <>
-            <WalletInfo />
             <BankAppInteract />
           </>
         ) : (
           <div className="connect-prompt">
             <h2>Chào mừng đến với Bank App</h2>
-            <p>Kết nối ví Phantom của bạn để bắt đầu gửi và rút SOL.</p>
+            <p>Kết nối ví Phantom của bạn để xem số dư, nạp SOL vào Bank App và đọc dữ liệu on-chain.</p>
           </div>
         )}
       </main>

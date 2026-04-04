@@ -74,21 +74,30 @@ describe("exercise", () => {
   });
 
   it("initializes and uses large approval data with zero-copy AccountLoader<T>", async () => {
-    // TODO:
-    // - Derive a PDA for the zero-copy account:
-    //     const [zcPda] = PublicKey.findProgramAddressSync(
-    //       [Buffer.from("approval_zero_copy"), provider.wallet.publicKey.toBuffer()],
-    //       program.programId
-    //     );
-    //
-    // - Call `initializeLargeApprovalZeroCopy` with that PDA.
-    // - Then call `processLargeApprovalZeroCopy`.
-    // - Fetch the account with `getAccountInfo` and assert that:
-    //     * accountInfo is not null
-    //     * data length is large (e.g. > 4096) since it holds 512 u64 values.
-    //
-    // Discussion prompt for students:
-    // - What happens if you try to make the "regular" account as large as the zero-copy one?
-    // - When/why does the BPF stack limit become a problem?
+    const [zcPda] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("approval_zero_copy"), provider.wallet.publicKey.toBuffer()],
+      program.programId
+    );
+
+    await program.methods
+      .initializeLargeApprovalZeroCopy()
+      .accounts({
+        approvalData: zcPda,
+        authority: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    await program.methods
+      .processLargeApprovalZeroCopy()
+      .accounts({
+        approvalData: zcPda,
+        authority: provider.wallet.publicKey,
+      })
+      .rpc();
+
+    const accountInfo = await provider.connection.getAccountInfo(zcPda);
+    expect(accountInfo).to.not.be.null;
+    expect(accountInfo!.data.length).to.be.greaterThan(4096);
   });
 });
