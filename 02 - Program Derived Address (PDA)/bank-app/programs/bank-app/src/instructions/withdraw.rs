@@ -4,12 +4,12 @@ use crate::{
     constant::{BANK_INFO_SEED, BANK_VAULT_SEED, USER_RESERVE_SEED},
     error::BankAppError,
     state::{BankInfo, UserReserve},
+    transfer_helper::sol_transfer_from_pda,
 };
 
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
     #[account(
-        mut,
         seeds = [BANK_INFO_SEED],
         bump
     )]
@@ -42,8 +42,24 @@ impl<'info> Withdraw<'info> {
             return Err(BankAppError::BankAppPaused.into());
         }
 
+        let user_reserve = &mut ctx.accounts.user_reserve;
+
+        require!(
+            user_reserve.deposited_amount >= withdraw_amount,
+            BankAppError::InsufficientFunds
+        );
+
         let pda_seeds: &[&[&[u8]]] = &[&[BANK_VAULT_SEED, &[ctx.accounts.bank_info.bump]]];
-        // Your code here
+
+        sol_transfer_from_pda(
+            ctx.accounts.bank_vault.to_account_info(),
+            ctx.accounts.user.to_account_info(),
+            &ctx.accounts.system_program,
+            pda_seeds,
+            withdraw_amount,
+        )?;
+
+        user_reserve.deposited_amount -= withdraw_amount;
 
         Ok(())
     }
