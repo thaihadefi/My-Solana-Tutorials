@@ -1,9 +1,10 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { BankApp } from "../target/types/bank_app";
-import { PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { BN } from "bn.js";
-import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { assert } from "chai";
 
 describe("bank-app", () => {
   // Configure the client to use the local cluster.
@@ -11,6 +12,9 @@ describe("bank-app", () => {
   anchor.setProvider(provider);
 
   const program = anchor.workspace.BankApp as Program<BankApp>;
+
+  // token mint created via `spl-token create-token` on devnet, see README section 2
+  const TOKEN_MINT = new PublicKey("7eeyDsUYHQd4RftTPfw9Zu37eDcicbdtcZ3oHRgaw4MM");
 
   const BANK_APP_ACCOUNTS = {
     bankInfo: PublicKey.findProgramAddressSync(
@@ -38,6 +42,20 @@ describe("bank-app", () => {
     }
   }
 
+  const ensureAtaExists = async (mint: PublicKey, owner: PublicKey, allowOwnerOffCurve: boolean) => {
+    const ata = getAssociatedTokenAddressSync(mint, owner, allowOwnerOffCurve);
+    const preInstructions: TransactionInstruction[] = [];
+    if (await provider.connection.getAccountInfo(ata) == null) {
+      preInstructions.push(createAssociatedTokenAccountInstruction(
+        provider.publicKey,
+        ata,
+        owner,
+        mint
+      ));
+    }
+    return { ata, preInstructions };
+  };
+
   it("Is initialized!", async () => {
     try {
       const bankInfo = await program.account.bankInfo.fetch(BANK_APP_ACCOUNTS.bankInfo)
@@ -45,10 +63,7 @@ describe("bank-app", () => {
     } catch {
       const tx = await program.methods.initialize()
         .accounts({
-          bankInfo: BANK_APP_ACCOUNTS.bankInfo,
-          bankVault: BANK_APP_ACCOUNTS.bankVault,
           authority: provider.publicKey,
-          systemProgram: SystemProgram.programId
         }).rpc();
       console.log("Initialize signature: ", tx);
     }
@@ -57,11 +72,7 @@ describe("bank-app", () => {
   it("Is deposited!", async () => {
     const tx = await program.methods.deposit(new BN(1_000_000))
       .accounts({
-        bankInfo: BANK_APP_ACCOUNTS.bankInfo,
-        bankVault: BANK_APP_ACCOUNTS.bankVault,
-        userReserve: BANK_APP_ACCOUNTS.userReserve(provider.publicKey),
         user: provider.publicKey,
-        systemProgram: SystemProgram.programId
       }).rpc();
     console.log("Deposit signature: ", tx);
 
@@ -69,36 +80,84 @@ describe("bank-app", () => {
     console.log("User reserve: ", userReserve.depositedAmount.toString())
   });
 
-  it("Is deposited token!", async () => {
-    let tokenMint = new PublicKey("FBUoe8bLbPBh4VcF4jwg1L53XZBdSJoERry16u26UnNL") //you should put your token mint here
-    let userAta = getAssociatedTokenAddressSync(tokenMint, provider.publicKey)
-    let bankAta = getAssociatedTokenAddressSync(tokenMint, BANK_APP_ACCOUNTS.bankVault, true)
+  it("Is withdrawn!", async () => {
+    const before = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey));
 
-    let preInstructions: TransactionInstruction[] = []
-    if (await provider.connection.getAccountInfo(bankAta) == null) {
-      preInstructions.push(createAssociatedTokenAccountInstruction(
-        provider.publicKey,
-        bankAta,
-        BANK_APP_ACCOUNTS.bankVault,
-        tokenMint
-      ))
-    }
-
-    const tx = await program.methods.depositToken(new BN(1_000_000_000))
+    const withdrawAmount = new BN(400_000);
+    const tx = await program.methods.withdraw(withdrawAmount)
       .accounts({
-        bankInfo: BANK_APP_ACCOUNTS.bankInfo,
-        bankVault: BANK_APP_ACCOUNTS.bankVault,
-        tokenMint,
-        userAta,
-        bankAta,
-        userReserve: BANK_APP_ACCOUNTS.userReserve(provider.publicKey, tokenMint),
         user: provider.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId
-      }).preInstructions(preInstructions).rpc();
+      }).rpc();
+    console.log("Withdraw signature: ", tx);
+
+    const after = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey));
+    assert.equal(
+      after.depositedAmount.toString(),
+      before.depositedAmount.sub(withdrawAmount).toString()
+    );
+  });
+
+  it("Is deposited token!", async () => {
+    const { preInstructions: userAtaIx } = await ensureAtaExists(TOKEN_MINT, provider.publicKey, false);
+    const { preInstructions: bankAtaIx } = await ensureAtaExists(TOKEN_MINT, BANK_APP_ACCOUNTS.bankVault, true);
+
+    const depositAmount = new BN(500_000);
+    const tx = await program.methods.depositToken(depositAmount)
+      .accounts({
+        tokenMint: TOKEN_MINT,
+        user: provider.publicKey,
+      })
+      .preInstructions([...userAtaIx, ...bankAtaIx])
+      .rpc();
     console.log("Deposit token signature: ", tx);
 
-    const userReserve = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey, tokenMint))
-    console.log("User reserve: ", userReserve.depositedAmount.toString())
+    const userReserve = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey, TOKEN_MINT))
+    console.log("User token reserve: ", userReserve.depositedAmount.toString())
+  });
+
+  it("Is withdrawn token!", async () => {
+    const before = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey, TOKEN_MINT));
+
+    const withdrawAmount = new BN(200_000);
+    const tx = await program.methods.withdrawToken(withdrawAmount)
+      .accounts({
+        tokenMint: TOKEN_MINT,
+        user: provider.publicKey,
+      }).rpc();
+    console.log("Withdraw token signature: ", tx);
+
+    const after = await program.account.userReserve.fetch(BANK_APP_ACCOUNTS.userReserve(provider.publicKey, TOKEN_MINT));
+    assert.equal(
+      after.depositedAmount.toString(),
+      before.depositedAmount.sub(withdrawAmount).toString()
+    );
+  });
+
+  it("Can pause and unpause the bank", async () => {
+    await program.methods.pause(true)
+      .accounts({
+        authority: provider.publicKey,
+      }).rpc();
+
+    let bankInfo = await program.account.bankInfo.fetch(BANK_APP_ACCOUNTS.bankInfo);
+    assert.isTrue(bankInfo.isPaused);
+
+    try {
+      await program.methods.deposit(new BN(1_000_000))
+        .accounts({
+          user: provider.publicKey,
+        }).rpc();
+      assert.fail("Deposit should have been blocked while paused");
+    } catch (err) {
+      assert.include(err.toString(), "BankAppPaused");
+    }
+
+    await program.methods.pause(false)
+      .accounts({
+        authority: provider.publicKey,
+      }).rpc();
+
+    bankInfo = await program.account.bankInfo.fetch(BANK_APP_ACCOUNTS.bankInfo);
+    assert.isFalse(bankInfo.isPaused);
   });
 });
