@@ -1,21 +1,20 @@
 [toolchain]
 
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.devnet]
+bank_app = "Ctjse4CJqH8n2Y2LskYPKCq7LJTocSyuucJ1Y75wisup"
 staking-app = "EYdKY4wWuwNr7uVRQNBUEXeJyLCAatSELPck3quW7JvA"
-
-[programs.localnet]
-bank_app = "3q57ftWH75aKfxoNnV6Lu1n8LhV73xxKHAxPapL6Jvh7"
+token-staking-app = "2X53ywfkurj19152NjrfVRrbUsNx7PQ7FkB82yKxhKkT"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
-wallet = "/Users/nhatbui97/.config/solana/id.json"
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

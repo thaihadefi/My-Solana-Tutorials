@@ -34,7 +34,6 @@ pub fn token_transfer_from_pda<'info>(
         pda_seeds,
     );
     token::transfer(cpi_ctx, amount)?;
-
     Ok(())
 }
 

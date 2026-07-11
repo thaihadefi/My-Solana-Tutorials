@@ -8,7 +8,7 @@ pub mod transfer_helper;
 
 use instructions::*;
 
-declare_id!("GTgSzfttS3QhnABcxcm1WivcjruZZpJj5w9GorCFuzWF");
+declare_id!("DxR6EaPVgvUQH1WgCkNRfGvgJV4WGNsBoLpeG7pZrvP9");
 
 #[program]
 pub mod bank_app {
@@ -26,7 +26,11 @@ pub mod bank_app {
         return Withdraw::process(ctx, withdraw_amount);
     }
 
-    pub fn pause(ctx: Context<Pause>, is_paused: bool) -> Result<()> {
-        return Pause::process(ctx, is_paused);
+    pub fn pause(ctx: Context<Pause>) -> Result<()> {
+        return Pause::pause(ctx);
+    }
+
+    pub fn unpause(ctx: Context<Pause>) -> Result<()> {
+        return Pause::unpause(ctx);
     }
 }

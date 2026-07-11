@@ -1,12 +1,12 @@
 [package]
-name = "bank-app"
+name = "token-staking-app"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "bank_app"
+name = "token_staking_app"
 
 [features]
 no-entrypoint = []
@@ -18,5 +18,3 @@ idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 [dependencies]
 anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
 anchor-spl = "0.31.1"
-staking-app = {  path = "../staking-app", features = ["cpi"] }
-token-staking-app = { path = "../token-staking-app", features = ["cpi"] }

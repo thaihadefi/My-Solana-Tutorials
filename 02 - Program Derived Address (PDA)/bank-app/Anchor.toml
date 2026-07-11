@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-bank_app = "GTgSzfttS3QhnABcxcm1WivcjruZZpJj5w9GorCFuzWF"
+bank_app = "DxR6EaPVgvUQH1WgCkNRfGvgJV4WGNsBoLpeG7pZrvP9"
 
 [registry]
 url = "https://api.apr.dev"

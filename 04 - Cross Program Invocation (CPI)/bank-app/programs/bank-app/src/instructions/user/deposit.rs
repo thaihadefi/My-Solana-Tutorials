@@ -1,10 +1,14 @@
 use anchor_lang::{prelude::*, system_program};
+use anchor_spl::{
+    token::Token,
+    token_interface::{Mint, TokenAccount},
+};
 
 use crate::{
     constant::{BANK_INFO_SEED, BANK_VAULT_SEED, USER_RESERVE_SEED},
     error::BankAppError,
     state::{BankInfo, UserReserve},
-    transfer_helper::sol_transfer_from_user,
+    transfer_helper::token_transfer_from_user,
 };
 
 #[derive(Accounts)]
@@ -24,9 +28,29 @@ pub struct Deposit<'info> {
     )]
     pub bank_vault: UncheckedAccount<'info>,
 
+    pub token_mint: Box<InterfaceAccount<'info, Mint>>,
+
+    #[account(
+        mut,
+        associated_token::mint = token_mint,
+        associated_token::authority = user
+    )]
+    pub user_ata: Box<InterfaceAccount<'info, TokenAccount>>,
+
+    #[account(
+        mut,
+        associated_token::mint = token_mint,
+        associated_token::authority = bank_vault
+    )]
+    pub bank_ata: Box<InterfaceAccount<'info, TokenAccount>>,
+
     #[account(
         init_if_needed,
-        seeds = [USER_RESERVE_SEED, user.key().as_ref()],
+        seeds = [
+            USER_RESERVE_SEED,
+            user.key().as_ref(),
+            token_mint.key().as_ref()
+        ],
         bump,
         payer = user,
         space = 8 + std::mem::size_of::<UserReserve>(),
@@ -35,21 +59,25 @@ pub struct Deposit<'info> {
 
     #[account(mut)]
     pub user: Signer<'info>,
+    pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
 }
 
 impl<'info> Deposit<'info> {
     pub fn process(ctx: Context<Deposit>, deposit_amount: u64) -> Result<()> {
-        if ctx.accounts.bank_info.is_paused {
+        let bank_info = &mut ctx.accounts.bank_info;
+
+        if bank_info.is_paused {
             return Err(BankAppError::BankAppPaused.into());
         }
 
         let user_reserve = &mut ctx.accounts.user_reserve;
 
-        sol_transfer_from_user(
+        token_transfer_from_user(
+            ctx.accounts.user_ata.to_account_info(),
+            ctx.accounts.bank_ata.to_account_info(),
             &ctx.accounts.user,
-            ctx.accounts.bank_vault.to_account_info(),
-            &ctx.accounts.system_program,
+            &ctx.accounts.token_program,
             deposit_amount,
         )?;
 

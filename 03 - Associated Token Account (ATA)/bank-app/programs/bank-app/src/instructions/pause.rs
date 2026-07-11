@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{constant::BANK_INFO_SEED, state::BankInfo};
+use crate::{constant::BANK_INFO_SEED, error::BankAppError, state::BankInfo};
 
 #[derive(Accounts)]
 pub struct Pause<'info> {
@@ -16,10 +16,27 @@ pub struct Pause<'info> {
 }
 
 impl<'info> Pause<'info> {
-    pub fn process(ctx: Context<Pause>, is_paused: bool) -> Result<()> {
-        ctx.accounts.bank_info.is_paused = is_paused;
+    pub fn pause(ctx: Context<Pause>) -> Result<()> {
+        require!(
+            !ctx.accounts.bank_info.is_paused,
+            BankAppError::BankAppPaused
+        );
 
-        msg!("Bank app paused state set to {}", is_paused);
+        ctx.accounts.bank_info.is_paused = true;
+
+        msg!("Bank app paused");
+        Ok(())
+    }
+
+    pub fn unpause(ctx: Context<Pause>) -> Result<()> {
+        require!(
+            ctx.accounts.bank_info.is_paused,
+            BankAppError::BankAppNotPaused
+        );
+
+        ctx.accounts.bank_info.is_paused = false;
+
+        msg!("Bank app unpaused");
         Ok(())
     }
 }
