@@ -2,13 +2,14 @@ use anchor_lang::prelude::*;
 
 pub mod constant;
 pub mod error;
+pub mod exchange_rate;
 pub mod instructions;
 pub mod state;
 pub mod transfer_helper;
 
 use instructions::*;
 
-declare_id!("Ctjse4CJqH8n2Y2LskYPKCq7LJTocSyuucJ1Y75wisup");
+declare_id!("H2n3xQYn9eaXktSA9cWkJYRJ9ubYF8gJusZ28JeM9YEt");
 
 #[program]
 pub mod bank_app {
@@ -20,10 +21,6 @@ pub mod bank_app {
 
     pub fn invest(ctx: Context<Invest>, amount: u64, is_stake: bool) -> Result<()> {
         return Invest::process(ctx, amount, is_stake);
-    }
-
-    pub fn invest_token(ctx: Context<InvestToken>, amount: u64, is_stake: bool) -> Result<()> {
-        return InvestToken::process(ctx, amount, is_stake);
     }
 
     pub fn deposit(ctx: Context<Deposit>, deposit_amount: u64) -> Result<()> {

@@ -60,9 +60,9 @@ impl<'info> Invest<'info> {
             return Err(BankAppError::BankAppPaused.into());
         }
 
-        let vault_seeds: &[&[&[u8]]] = &[&[BANK_VAULT_SEED, &[ctx.accounts.bank_info.bump]]];
+        let pda_seeds: &[&[&[u8]]] = &[&[BANK_VAULT_SEED, &[ctx.accounts.bank_info.bump]]];
 
-        if is_stake {
+        if is_stake && amount != 0 {
             // Leave the rest wrapped so withdraw() still has liquidity
             let remaining = ctx
                 .accounts
@@ -78,11 +78,11 @@ impl<'info> Invest<'info> {
                     destination: ctx.accounts.bank_vault.to_account_info(),
                     authority: ctx.accounts.bank_vault.to_account_info(),
                 },
-                vault_seeds,
+                pda_seeds,
             ))?;
 
             // Recreate even if remaining == 0 so the ATA is never left missing
-            Self::rewrap(&ctx, vault_seeds, remaining)?;
+            Self::rewrap(&ctx, pda_seeds, remaining)?;
         }
 
         cpi::stake(
@@ -95,21 +95,21 @@ impl<'info> Invest<'info> {
                     payer: ctx.accounts.authority.to_account_info(),
                     system_program: ctx.accounts.system_program.to_account_info(),
                 },
-                vault_seeds,
+                pda_seeds,
             ),
             amount,
             is_stake,
         )?;
 
-        if !is_stake {
-            // Re-wrap what the unstake CPI just returned.
-            Self::rewrap(&ctx, vault_seeds, amount)?;
+        if !is_stake && amount != 0 {
+            // Re-wrap what the unstake CPI just returned
+            Self::rewrap(&ctx, pda_seeds, amount)?;
         }
 
         Ok(())
     }
 
-    fn rewrap(ctx: &Context<Invest>, vault_seeds: &[&[&[u8]]], amount: u64) -> Result<()> {
+    fn rewrap(ctx: &Context<Invest>, pda_seeds: &[&[&[u8]]], amount: u64) -> Result<()> {
         // bank_vault self-funds the rent — it just got it back from the close
         associated_token::create_idempotent(CpiContext::new_with_signer(
             ctx.accounts.associated_token_program.to_account_info(),
@@ -121,7 +121,7 @@ impl<'info> Invest<'info> {
                 system_program: ctx.accounts.system_program.to_account_info(),
                 token_program: ctx.accounts.token_program.to_account_info(),
             },
-            vault_seeds,
+            pda_seeds,
         ))?;
 
         system_program::transfer(
@@ -131,7 +131,7 @@ impl<'info> Invest<'info> {
                     from: ctx.accounts.bank_vault.to_account_info(),
                     to: ctx.accounts.bank_wsol_ata.to_account_info(),
                 },
-                vault_seeds,
+                pda_seeds,
             ),
             amount,
         )?;
