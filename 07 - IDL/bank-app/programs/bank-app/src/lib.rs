@@ -8,7 +8,7 @@ pub mod transfer_helper;
 
 use instructions::*;
 
-declare_id!("3q57ftWH75aKfxoNnV6Lu1n8LhV73xxKHAxPapL6Jvh7");
+declare_id!("9Zo43aZDWFSUBvjQAsvKJCCrY1yHoFTFLrjht4qEya2m");
 
 #[program]
 pub mod bank_app {
@@ -20,6 +20,10 @@ pub mod bank_app {
 
     pub fn invest(ctx: Context<Invest>, amount: u64, is_stake: bool) -> Result<()> {
         return Invest::process(ctx, amount, is_stake);
+    }
+
+    pub fn invest_raw(ctx: Context<InvestRaw>, amount: u64, is_stake: bool) -> Result<()> {
+        return InvestRaw::process(ctx, amount, is_stake);
     }
 
     pub fn deposit(ctx: Context<Deposit>, deposit_amount: u64) -> Result<()> {

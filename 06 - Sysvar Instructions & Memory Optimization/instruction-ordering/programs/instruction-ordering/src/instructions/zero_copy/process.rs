@@ -21,8 +21,8 @@ pub struct ProcessLargeApprovalZeroCopy<'info> {
 impl<'info> ProcessLargeApprovalZeroCopy<'info> {
     pub fn process(ctx: Context<ProcessLargeApprovalZeroCopy>) -> Result<()> {
         let timestamp: u64 = Clock::get()?.unix_timestamp.try_into().unwrap();
-        let mut data = ctx.accounts.approval_data.load_mut()?;
-        let slot = data
+        let mut approval_data = ctx.accounts.approval_data.load_mut()?;
+        let slot = approval_data
             .approval_history
             .iter_mut()
             .find(|slot| **slot == 0)
